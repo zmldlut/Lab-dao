@@ -78,6 +78,7 @@ public class StudentDaoImpl extends BaseDaoImpl implements StudentDao{
         return result;
     }
 	
+	@Override
 	public Student _findDao(String cardID) {
 		Student result = null;
 		String sql = "select stdnum from student where cardID = ?";
@@ -102,6 +103,7 @@ public class StudentDaoImpl extends BaseDaoImpl implements StudentDao{
 	}
 	
 	//电脑预约更新密码
+	@Override
 	public boolean updatePass(String stdNum, String password) {
 		boolean result = false;
         String sql = "update student set password = ? where stdNum = ?";

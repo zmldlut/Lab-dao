@@ -30,6 +30,14 @@ public class StudentDaoProxy extends BaseDaoProxy implements StudentDao{
         return result;
     }
     
+    @Override
+    public Student _findDao(String cardID) {
+		Student result = null;
+		result = ((StudentDaoImpl) dao)._findDao(cardID);
+		connPool.returnConnection(conn);
+		return result;
+	}
+    
   //µçÄÔÔ¤Ô¼µÇÂ¼
     @Override
     public boolean updatePass(String stdNum, String pwd) {

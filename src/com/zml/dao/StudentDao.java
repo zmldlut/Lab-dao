@@ -8,6 +8,7 @@ public interface StudentDao extends BaseDao<Student>{
 	
 	Student checkUser(String stdNum, String pwd);
 	boolean findDao(String cardID);
+	Student _findDao(String cardID);
 	boolean updatePass(String stdNum, String pwd);
 	
 	///
