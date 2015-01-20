@@ -18,19 +18,18 @@ public class NodeDaoImpl extends BaseDaoImpl implements NodeDao{
 	@Override
 	public ArrayList<Node> getNodes(int type, int page, int pageCount) {
 		ArrayList<Node> result = new ArrayList<Node>();
-		String sql = "select * from node";
-		
+		String sql = "select id,name,description,location,status,type from node";
 		try {
 			if (type >= 0) {
-				sql += " where type = ? ORDER BY stdnum asc LIMIT ?,?";
+				sql += " where type = ? ORDER BY id asc LIMIT ?,?";
 				this.pstmt = this.conn.prepareStatement(sql);
 				this.pstmt.setInt(1, type);
-				this.pstmt.setInt(2, page);
+				this.pstmt.setInt(2, page * pageCount - pageCount);
 				this.pstmt.setInt(3, pageCount);
 			} else {
-				sql += "ORDER BY stdnum asc LIMIT ?,?";
+				sql += " ORDER BY id asc LIMIT ?,?";
 				this.pstmt = this.conn.prepareStatement(sql);
-				this.pstmt.setInt(1, page);
+				this.pstmt.setInt(1, page * pageCount - pageCount);
 				this.pstmt.setInt(2, pageCount);
 			}
 			ResultSet rs = this.pstmt.executeQuery();
@@ -45,6 +44,7 @@ public class NodeDaoImpl extends BaseDaoImpl implements NodeDao{
 				result.add(node);
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			try{
@@ -68,6 +68,7 @@ public class NodeDaoImpl extends BaseDaoImpl implements NodeDao{
 				result = rs.getInt(1);
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			try{
@@ -120,6 +121,7 @@ public class NodeDaoImpl extends BaseDaoImpl implements NodeDao{
 				result = true;
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			try{
@@ -148,6 +150,7 @@ public class NodeDaoImpl extends BaseDaoImpl implements NodeDao{
 			System.out.println(rs);
 			if(rs < 1) result = false;
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 			result = false;
 		} finally{
@@ -157,6 +160,35 @@ public class NodeDaoImpl extends BaseDaoImpl implements NodeDao{
 				e.printStackTrace();
 			}
 		}
+		return result;
+	}
+
+	@Override
+	public Node getNode(int id) {
+		Node result = new Node();
+		String sql = "select id,name,description,location,status,type from node where id = ?";
+		try {
+			this.pstmt = this.conn.prepareStatement(sql);
+			this.pstmt.setInt(1, id);
+			ResultSet rs = this.pstmt.executeQuery();
+			if(rs.next()){
+				result.setId(rs.getInt(1));
+				result.setName(rs.getString(2));
+				result.setDescription(rs.getString(3));
+				result.setLocation(rs.getString(4));
+				result.setStatus(rs.getInt(5));
+				result.setType(rs.getInt(6));
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} finally{
+			try{
+				this.pstmt.close();
+			} catch (SQLException e) {
+				e.printStackTrace();
+			}
+		}	
 		return result;
 	}
 

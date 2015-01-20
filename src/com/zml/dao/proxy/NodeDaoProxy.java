@@ -13,13 +13,6 @@ public class NodeDaoProxy extends BaseDaoProxy implements NodeDao{
 	}
 
 	@Override
-	public boolean doCreate(Node obj) {
-		// TODO Auto-generated method stub
-		return false;
-	}
-
-
-	@Override
 	public Node findDao(Node obj) {
 		// TODO Auto-generated method stub
 		return null;
@@ -43,6 +36,14 @@ public class NodeDaoProxy extends BaseDaoProxy implements NodeDao{
 	}
 
 	@Override
+	public boolean doCreate(Node node) {
+		boolean result = false;
+		result = ((NodeDaoImpl) super.dao).doCreate(node);
+		connPool.returnConnection(conn);
+		return result;
+	}
+	
+	@Override
 	public boolean delNode(int id) {
 		boolean result = false;
 		result = ((NodeDaoImpl) super.dao).delNode(id);
@@ -54,6 +55,14 @@ public class NodeDaoProxy extends BaseDaoProxy implements NodeDao{
 	public boolean updateNode(Node node) {
 		boolean result = false;
 		result = ((NodeDaoImpl) super.dao).updateNode(node);
+		connPool.returnConnection(conn);
+		return result;
+	}
+
+	@Override
+	public Node getNode(int id) {
+		Node result = new Node();
+		result = ((NodeDaoImpl) super.dao).getNode(id);
 		connPool.returnConnection(conn);
 		return result;
 	}

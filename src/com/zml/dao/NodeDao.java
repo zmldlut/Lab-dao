@@ -10,4 +10,5 @@ public interface NodeDao extends BaseDao<Node>{
 
 	boolean delNode(int id);
 	boolean updateNode(Node node);
+	Node getNode(int id);
 }

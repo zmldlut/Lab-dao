@@ -282,6 +282,7 @@ public class StudentDaoImpl extends BaseDaoImpl implements StudentDao{
 
 	@Override
 	public ArrayList<Student> getStudents(Student student, int page, int pageCount) {
+		// TODO Auto-generated method stub
 		ArrayList<Student> result = new ArrayList<Student>();
 		String sql = "select stdnum,cardID,name,password,major_id,grade_id,phone,email,qq,is_here from student ";
 		int cnt = 0;
@@ -326,10 +327,9 @@ public class StudentDaoImpl extends BaseDaoImpl implements StudentDao{
 			sql += "qq = ?";
 		}
 		sql += " ORDER BY stdnum asc LIMIT ?,?";
-				
-		cnt = 0;
 		
 		try {
+			cnt = 0;
 			this.pstmt = this.conn.prepareStatement(sql);
 			if(!student.getStdnum().equals("")){
 				this.pstmt.setString(++cnt, student.getStdnum());
@@ -355,6 +355,7 @@ public class StudentDaoImpl extends BaseDaoImpl implements StudentDao{
 			if(!student.getQQ().equals("")){
 				this.pstmt.setString(++cnt, student.getQQ());
 			}
+			System.out.println(sql + " " + (page * pageCount - pageCount + 1) + " " + pageCount + " " + cnt);
 			this.pstmt.setInt(++cnt, page * pageCount - pageCount);
 			this.pstmt.setInt(++cnt, pageCount);
 			ResultSet rs = this.pstmt.executeQuery();
@@ -373,6 +374,7 @@ public class StudentDaoImpl extends BaseDaoImpl implements StudentDao{
 				result.add(stu);
 			}
 		} catch (SQLException e) {
+			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			try{
