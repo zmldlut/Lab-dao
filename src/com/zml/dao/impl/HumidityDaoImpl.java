@@ -53,78 +53,22 @@ public class HumidityDaoImpl extends BaseDaoImpl implements HumidityDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
-	@Override
-	public ArrayList<Humidity> getHumidity() {
-		ArrayList<Humidity> result = new ArrayList<Humidity>();
-		String sql = "select id,node_id,acq_time,humidity_value from humidity ORDER BY acq_time desc";
-		try {
-			this.pstmt = this.conn.prepareStatement(sql);
-			ResultSet rs = this.pstmt.executeQuery();
-			while(rs.next()){
-				Humidity Humidity = new Humidity();
-				Humidity.setId(rs.getInt(1));
-				Humidity.setNode_id(rs.getInt(2));
-				Humidity.setAcq_time(rs.getDate(3));
-				Humidity.setHumidity_value(rs.getInt(4));
-				result.add(Humidity);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try{
-				this.pstmt.close();
-			} catch (SQLException e){
-				e.printStackTrace();
-			}
-		}
-		
-		return result;
-	}
 
 	@Override
-	public ArrayList<Humidity> getHumidity(int page, int pageCount) {
-		ArrayList<Humidity> result = new ArrayList<Humidity>();
-		String sql = "select id,node_id,acq_time,humidity_value from humidity ORDER BY acq_time desc LIMIT ? ?";
-		try {
-			this.pstmt = this.conn.prepareStatement(sql);
-			this.pstmt.setInt(1, page * pageCount - pageCount + 1);
-			this.pstmt.setInt(2, pageCount);
-			ResultSet rs = this.pstmt.executeQuery();
-			while(rs.next()){
-				Humidity Humidity = new Humidity();
-				Humidity.setId(rs.getInt(1));
-				Humidity.setNode_id(rs.getInt(2));
-				Humidity.setAcq_time(new Date(rs.getDate(3).getTime()) );
-				Humidity.setHumidity_value(rs.getInt(4));
-				result.add(Humidity);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try{
-				this.pstmt.close();
-			} catch (SQLException e){
-				e.printStackTrace();
-			}
-		}
-		
-		return result;
-	}
-
-	@Override
-	public ArrayList<Humidity> getHumidity(Date start, Date end,
+	public ArrayList<Humidity> getHumidity(Date start, Date end, int nodeID,
 			int page, int pageCount) {
 		ArrayList<Humidity> result = new ArrayList<Humidity>();
 		String sql = "select id,node_id,acq_time,Humidity_value from Humidity " + 
 				"where acq_time between ? and ? " + 
+				"node_id = ? " +
 				"ORDER BY acq_time desc LIMIT ?,?";
 		try {
 			this.pstmt = this.conn.prepareStatement(sql);
 			this.pstmt.setDate(1, new java.sql.Date(start.getTime()));
 			this.pstmt.setDate(2, new java.sql.Date(end.getTime()));
-			this.pstmt.setInt(3, page * pageCount - pageCount + 1);
-			this.pstmt.setInt(4, pageCount);
+			this.pstmt.setInt(3, nodeID);
+			this.pstmt.setInt(4, page * pageCount - pageCount + 1);
+			this.pstmt.setInt(5, pageCount);
 			ResultSet rs = this.pstmt.executeQuery();
 			while(rs.next()){
 				SimpleDateFormat date = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
@@ -134,12 +78,12 @@ public class HumidityDaoImpl extends BaseDaoImpl implements HumidityDao{
 				} catch (ParseException e) {
 					e.printStackTrace();
 				}
-				Humidity Humidity = new Humidity();
-				Humidity.setId(rs.getInt(1));
-				Humidity.setNode_id(rs.getInt(2));
-				Humidity.setAcq_time(acq_time);
-				Humidity.setHumidity_value(rs.getInt(4));
-				result.add(Humidity);
+				Humidity humidity = new Humidity();
+				humidity.setId(rs.getInt(1));
+				humidity.setNode_id(rs.getInt(2));
+				humidity.setAcq_time(acq_time);
+				humidity.setHumidity_value(rs.getInt(4));
+				result.add(humidity);
 			}
 			System.out.println(result.size());
 		} catch (SQLException e) {
@@ -155,98 +99,16 @@ public class HumidityDaoImpl extends BaseDaoImpl implements HumidityDao{
 	}
 
 	@Override
-	public ArrayList<Humidity> getHumidityFromNodeID(int nodeID,
-			int page, int pageCount) {
-		ArrayList<Humidity> result = new ArrayList<Humidity>();
-		String sql = "select id,node_id,acq_time,Humidity_value from humidity where acq_time between ? and ? ORDER BY acq_time desc LIMIT ?,?";
-		try {
-			this.pstmt = this.conn.prepareStatement(sql);
-			this.pstmt.setInt(1, nodeID);
-			this.pstmt.setInt(2, page * pageCount - pageCount + 1);
-			this.pstmt.setInt(3, pageCount);
-			ResultSet rs = this.pstmt.executeQuery();
-			while(rs.next()){
-				Humidity Humidity = new Humidity();
-				Humidity.setId(rs.getInt(1));
-				Humidity.setNode_id(rs.getInt(2));
-				Humidity.setAcq_time(rs.getDate(3));
-				Humidity.setHumidity_value(rs.getInt(4));
-				result.add(Humidity);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try{
-				this.pstmt.close();
-			} catch (SQLException e){
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public int getHumiditySize() {
-		int result = 0;
-		String sql = "select count(*) from humidity";
-		try {
-			this.pstmt = this.conn.prepareStatement(sql);
-			ResultSet rs = this.pstmt.executeQuery();
-			if(rs.next()){
-				result = rs.getInt(1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try{
-				this.pstmt.close();
-			} catch (SQLException e){
-				e.printStackTrace();
-			}
-		}
-		
-		return result;
-	}
-
-	@Override
-	public int getHumiditySize(Date start, Date end) {
+	public int getHumiditySize(Date start, Date end, int nodeID) {
 		int result = 0;
 		String sql = "select count(*) from humidity " + 
-				"where UNIX_TIMESTAMP(acq_time) >  UNIX_TIMESTAMP(?) and " + 
-				"UNIX_TIMESTAMP(acq_time) < UNIX_TIMESTAMP(?) ";
+				"where acq_time between ? and ? " + 
+				"node_id = ?";
 		try {
 			this.pstmt = this.conn.prepareStatement(sql);
 			this.pstmt.setDate(1, new java.sql.Date(start.getTime()) );
 			this.pstmt.setDate(2, new java.sql.Date(end.getTime()));
-			ResultSet rs = this.pstmt.executeQuery();
-			if(rs.next()){
-				result = rs.getInt(1);
-			}
-		} catch (SQLException e) {
-			e.printStackTrace();
-		} finally{
-			try{
-				this.pstmt.close();
-			} catch (SQLException e){
-				e.printStackTrace();
-			}
-		}
-		return result;
-	}
-
-	@Override
-	public int getHumiditySize(Humidity Humidity) {
-		// TODO Auto-generated method stub
-		return 0;
-	}
-
-	@Override
-	public int getHumiditySizeFromNodeID(int nodeID) {
-		int result = 0;
-		String sql = "select count(*) from humidity where node_id = ?";
-		try {
-			this.pstmt = this.conn.prepareStatement(sql);
-			this.pstmt.setInt(1, nodeID);
+			this.pstmt.setInt(3, nodeID);
 			ResultSet rs = this.pstmt.executeQuery();
 			if(rs.next()){
 				result = rs.getInt(1);

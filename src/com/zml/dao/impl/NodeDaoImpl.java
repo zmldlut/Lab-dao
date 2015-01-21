@@ -68,7 +68,6 @@ public class NodeDaoImpl extends BaseDaoImpl implements NodeDao{
 				result = rs.getInt(1);
 			}
 		} catch (SQLException e) {
-			// TODO Auto-generated catch block
 			e.printStackTrace();
 		} finally{
 			try{

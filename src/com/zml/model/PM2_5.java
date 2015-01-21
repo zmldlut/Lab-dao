@@ -3,9 +3,16 @@ package com.zml.model;
 import java.util.Date;
 
 public class PM2_5 {
+	private int id;
 	private int node_id;
 	private int pm_value;
 	private Date acq_time;
+	public int getId() {
+		return id;
+	}
+	public void setId(int id) {
+		this.id = id;
+	}
 	public int getNode_id() {
 		return node_id;
 	}
@@ -25,6 +32,10 @@ public class PM2_5 {
 		this.acq_time = acq_time;
 	}
 
+	public PM2_5(){
+		
+	}
+	
 	public PM2_5(int node_id, int pm_value, Date acq_time) {
 		this.node_id = node_id;
 		this.pm_value = pm_value;

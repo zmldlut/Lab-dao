@@ -26,69 +26,19 @@ public class TemperatureDaoProxy extends BaseDaoProxy implements TemperatureDao{
 		// TODO Auto-generated method stub
 		return null;
 	}
-	
+
 	@Override
-	public ArrayList<Temperature> getTemperature() {
+	public ArrayList<Temperature> getTemperature(Date start, Date end, int nodeID, int page, int pageCount) {
 		ArrayList<Temperature> result = null;
-		result = ((TemperatureDao) super.dao).getTemperature();
+		result = ((TemperatureDao) super.dao).getTemperature(start, end, nodeID, page, pageCount);
 		connPool.returnConnection(conn);
 		return result;
 	}
 
 	@Override
-	public ArrayList<Temperature> getTemperature(int page, int pageCount) {
-		ArrayList<Temperature> result = null;
-		result = ((TemperatureDao) super.dao).getTemperature(page, pageCount);
-		connPool.returnConnection(conn);
-		return result;
-	}
-
-	@Override
-	public ArrayList<Temperature> getTemperature(Date start, Date end,
-			int page, int pageCount) {
-		ArrayList<Temperature> result = null;
-		result = ((TemperatureDao) super.dao).getTemperature(start, end, page, pageCount);
-		connPool.returnConnection(conn);
-		return result;
-	}
-
-	@Override
-	public ArrayList<Temperature> getTemperatureFromNodeID(int nodeID,
-			int page, int pageCount) {
-		ArrayList<Temperature> result = null;
-		result = ((TemperatureDao) super.dao).getTemperatureFromNodeID(nodeID, page, pageCount);
-		connPool.returnConnection(conn);
-		return result;
-	}
-
-	@Override
-	public int getTemperatureSize() {
+	public int getTemperatureSize(Date start, Date end, int nodeID) {
 		int result = 0;
-		result = ((TemperatureDao) super.dao).getTemperatureSize();
-		connPool.returnConnection(conn);
-		return result;
-	}
-
-	@Override
-	public int getTemperatureSize(Date start, Date end) {
-		int result = 0;
-		result = ((TemperatureDao) super.dao).getTemperatureSize(start, end);
-		connPool.returnConnection(conn);
-		return result;
-	}
-
-	@Override
-	public int getTemperatureSize(Temperature temperature) {
-		int result = 0;
-		result = ((TemperatureDao) super.dao).getTemperatureSize(temperature);
-		connPool.returnConnection(conn);
-		return result;
-	}
-
-	@Override
-	public int getTemperatureSizeFromNodeID(int nodeID) {
-		int result = 0;
-		result = ((TemperatureDao) super.dao).getTemperatureSizeFromNodeID(nodeID);
+		result = ((TemperatureDao) super.dao).getTemperatureSize(start, end, nodeID);
 		connPool.returnConnection(conn);
 		return result;
 	}
