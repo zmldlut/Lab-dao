@@ -55,17 +55,18 @@ public class PM2_5DaoImpl extends BaseDaoImpl implements PM2_5Dao{
 	@Override
 	public ArrayList<PM2_5> getPM2_5(Date start, Date end, int nodeID,
 			int page, int pageCount) {
+		
 		ArrayList<PM2_5> result = new ArrayList<PM2_5>();
 		String sql = "select id, node_id, acq_time, pm_value from pm2_5 " + 
 				"where acq_time between ? and ? " + 
-				"node_id = ? " +
+				"and node_id = ? " +
 				"ORDER BY acq_time desc LIMIT ?,?";
 		try {
 			this.pstmt = this.conn.prepareStatement(sql);
 			this.pstmt.setDate(1, new java.sql.Date(start.getTime()));
 			this.pstmt.setDate(2, new java.sql.Date(end.getTime()));
 			this.pstmt.setInt(3, nodeID);
-			this.pstmt.setInt(4, page * pageCount - pageCount + 1);
+			this.pstmt.setInt(4, page * pageCount - pageCount);
 			this.pstmt.setInt(5, pageCount);
 			ResultSet rs = this.pstmt.executeQuery();
 			while(rs.next()){
@@ -100,7 +101,7 @@ public class PM2_5DaoImpl extends BaseDaoImpl implements PM2_5Dao{
 	public int getPM2_5Size(Date start, Date end, int nodeID) {
 		int result = 0;
 		String sql = "select count(*) from pm2_5 " + 
-				"where acq_time between ? and ? " + 
+				"where acq_time between ? and ? and " + 
 				"node_id = ?";
 		try {
 			this.pstmt = this.conn.prepareStatement(sql);

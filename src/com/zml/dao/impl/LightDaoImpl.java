@@ -60,7 +60,7 @@ public class LightDaoImpl extends BaseDaoImpl implements LightDao{
 		ArrayList<Light> result = new ArrayList<Light>();
 		String sql = "select id, node_id, acq_time, light_value from light " + 
 				"where acq_time between ? and ? " + 
-				"node_id = ? " +
+				"and node_id = ? " +
 				"ORDER BY acq_time desc LIMIT ?,?";
 		try {
 			this.pstmt = this.conn.prepareStatement(sql);
@@ -103,7 +103,7 @@ public class LightDaoImpl extends BaseDaoImpl implements LightDao{
 		int result = 0;
 		String sql = "select count(*) from light " + 
 				"where acq_time between ? and ? " + 
-				"node_id = ?";
+				"and node_id = ?";
 		try {
 			this.pstmt = this.conn.prepareStatement(sql);
 			this.pstmt.setDate(1, new java.sql.Date(start.getTime()) );

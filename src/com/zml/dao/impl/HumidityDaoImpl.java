@@ -60,7 +60,7 @@ public class HumidityDaoImpl extends BaseDaoImpl implements HumidityDao{
 		ArrayList<Humidity> result = new ArrayList<Humidity>();
 		String sql = "select id,node_id,acq_time,Humidity_value from Humidity " + 
 				"where acq_time between ? and ? " + 
-				"node_id = ? " +
+				"and node_id = ? " +
 				"ORDER BY acq_time desc LIMIT ?,?";
 		try {
 			this.pstmt = this.conn.prepareStatement(sql);
