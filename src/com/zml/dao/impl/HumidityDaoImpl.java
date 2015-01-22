@@ -103,7 +103,7 @@ public class HumidityDaoImpl extends BaseDaoImpl implements HumidityDao{
 		int result = 0;
 		String sql = "select count(*) from humidity " + 
 				"where acq_time between ? and ? " + 
-				"node_id = ?";
+				"and node_id = ?";
 		try {
 			this.pstmt = this.conn.prepareStatement(sql);
 			this.pstmt.setDate(1, new java.sql.Date(start.getTime()) );
